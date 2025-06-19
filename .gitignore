@@ -1,4 +1,6 @@
 stop_times.txt
+validations.json
+.DS_Store
 
 # Logs
 logs
