@@ -3,7 +3,7 @@ import csv from 'csv-parser';
 
 const STOP_TIMES_PATH = './stop_times.txt';
 const OUTPUT_PATH = './validations.json';
-const NUM_VALIDATIONS = 100000;
+const NUM_VALIDATIONS = 10000000;
 
 function parseTime(str) {
   const [h, m, s] = str.split(':').map(Number);
@@ -67,8 +67,7 @@ async function parseStopTimes(path) {
   });
 }
 
-function generateValidations(tripStops, stopFrequency, count) {
-  const validations = [];
+function* generateValidations(tripStops, stopFrequency, count) {
   const tripIds = [...tripStops.keys()];
 
   for (let i = 0; i < count; i++) {
@@ -85,25 +84,58 @@ function generateValidations(tripStops, stopFrequency, count) {
     const idx = weightedRandomIndex(weights);
     const { time, stop_id } = stops[idx];
 
-    validations.push({
+    yield {
       trip_id,
       stop_id,
       validation_time: formatTime(time),
-    });
+    };
   }
+}
 
-  return validations;
+function writeValidationsStream(generator, outputPath) {
+  return new Promise((resolve, reject) => {
+    const writeStream = fs.createWriteStream(outputPath, { encoding: 'utf-8' });
+    
+    writeStream.on('error', reject);
+    writeStream.on('finish', resolve);
+    
+    writeStream.write('[\n');
+    
+    let isFirst = true;
+    let count = 0;
+    
+    for (const validation of generator) {
+      if (!isFirst) {
+        writeStream.write(',\n');
+      } else {
+        isFirst = false;
+      }
+      
+      writeStream.write('  ' + JSON.stringify(validation));
+      count++;
+      
+      // Show progress every 10,000 records
+      if (count % 10000 === 0) {
+        console.log(`Generated ${count} validations...`);
+      }
+    }
+    
+    writeStream.write('\n]');
+    writeStream.end();
+    
+    console.log(`Total validations generated: ${count}`);
+  });
 }
 
 async function main() {
   console.log('Parsing stop_times.txt...');
   const { tripStops, stopFrequency } = await parseStopTimes(STOP_TIMES_PATH);
 
-  console.log('Generating validations...');
-  const validations = generateValidations(tripStops, stopFrequency, NUM_VALIDATIONS);
+  console.log(`Generating ${NUM_VALIDATIONS} validations...`);
+  const validationGenerator = generateValidations(tripStops, stopFrequency, NUM_VALIDATIONS);
 
   console.log(`Saving to ${OUTPUT_PATH}...`);
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(validations, null, 2), 'utf-8');
+  await writeValidationsStream(validationGenerator, OUTPUT_PATH);
 
   console.log('Done!');
 }
