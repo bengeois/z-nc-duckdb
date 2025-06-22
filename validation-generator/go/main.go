@@ -16,7 +16,6 @@ import (
 const (
 	STOP_TIMES_PATH   = "./../stop_times.txt"
 	OUTPUT_PATH       = "./validations.json"
-	NUM_VALIDATIONS   = 100000000
 	BATCH_SIZE        = 10000 // Write to file every 10k records to avoid memory overflow
 )
 
@@ -29,6 +28,7 @@ type Validation struct {
 	TripID         string `json:"trip_id"`
 	StopID         string `json:"stop_id"`
 	ValidationTime string `json:"validation_time"`
+	ValidationDate string `json:"validation_date"`
 }
 
 func parseTime(timeStr string) int {
@@ -149,7 +149,7 @@ func parseStopTimes(path string) (map[string][]StopTime, map[string]int, error) 
 	return tripStops, stopFrequency, nil
 }
 
-func generateValidation(tripStops map[string][]StopTime, stopFrequency map[string]int, tripIDs []string) *Validation {
+func generateValidation(tripStops map[string][]StopTime, stopFrequency map[string]int, tripIDs []string, validationDate string) *Validation {
 	tripID := getRandomItem(tripIDs)
 	stops := tripStops[tripID]
 	
@@ -178,10 +178,11 @@ func generateValidation(tripStops map[string][]StopTime, stopFrequency map[strin
 		TripID:         tripID,
 		StopID:         selectedStop.StopID,
 		ValidationTime: formatTime(selectedStop.Time),
+		ValidationDate: validationDate,
 	}
 }
 
-func writeValidationsStream(tripStops map[string][]StopTime, stopFrequency map[string]int, outputPath string, count int) error {
+func writeValidationsStream(tripStops map[string][]StopTime, stopFrequency map[string]int, outputPath string, count int, validationDate string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -205,7 +206,7 @@ func writeValidationsStream(tripStops map[string][]StopTime, stopFrequency map[s
 	isFirst := true
 
 	for i := 0; i < count; i++ {
-		validation := generateValidation(tripStops, stopFrequency, tripIDs)
+		validation := generateValidation(tripStops, stopFrequency, tripIDs, validationDate)
 		if validation == nil {
 			continue
 		}
@@ -256,6 +257,15 @@ func main() {
 	// Seed random number generator
 	rand.Seed(time.Now().UnixNano())
 
+	fmt.Println("Parsing arguments...")
+	args := os.Args[1:]
+	if len (args) != 2 {
+		fmt.Println("Usage: go run main.go <numValidations> <validationDate>")
+		os.Exit(1)
+	}
+	numValidations, _ := strconv.Atoi(os.Args[1])
+	validationDate := os.Args[2]
+
 	fmt.Println("Parsing stop_times.txt...")
 	tripStops, stopFrequency, err := parseStopTimes(STOP_TIMES_PATH)
 	if err != nil {
@@ -264,10 +274,10 @@ func main() {
 	}
 
 	fmt.Printf("Found %d trips and %d unique stops\n", len(tripStops), len(stopFrequency))
-	fmt.Printf("Generating %d validations...\n", NUM_VALIDATIONS)
+	fmt.Printf("Generating %d validations...\n", numValidations)
 
 	fmt.Printf("Saving to %s...\n", OUTPUT_PATH)
-	err = writeValidationsStream(tripStops, stopFrequency, OUTPUT_PATH, NUM_VALIDATIONS)
+	err = writeValidationsStream(tripStops, stopFrequency, OUTPUT_PATH, numValidations, validationDate)
 	if err != nil {
 		fmt.Printf("Error writing validations: %v\n", err)
 		os.Exit(1)

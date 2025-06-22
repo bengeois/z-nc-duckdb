@@ -4,6 +4,7 @@ import csv from 'csv-parser';
 const STOP_TIMES_PATH = './stop_times.txt';
 const OUTPUT_PATH = './validations.json';
 const NUM_VALIDATIONS = 10000000;
+const VALIDATION_DATE = '2025-06-22';
 
 function parseTime(str) {
   const [h, m, s] = str.split(':').map(Number);
@@ -88,6 +89,7 @@ function* generateValidations(tripStops, stopFrequency, count) {
       trip_id,
       stop_id,
       validation_time: formatTime(time),
+      validation_date: VALIDATION_DATE,
     };
   }
 }

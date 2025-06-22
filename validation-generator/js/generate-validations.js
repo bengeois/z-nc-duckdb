@@ -1,10 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+import fs from 'fs';
+import readline from 'readline';
 
 const STOP_TIMES_PATH = './stop_times.txt';
 const OUTPUT_PATH = './validations.json';
 const NUM_VALIDATIONS = 10000; // Ajuste à volonté
+const VALIDATION_DATE = '2025-06-22'; // Ajuste à volonté
 
 async function parseStopTimes(filePath) {
   const fileStream = fs.createReadStream(filePath);
@@ -70,6 +70,7 @@ function generateValidations(tripTimes, count) {
     validations.push({
       trip_id,
       validation_time: formatTime(timestamp),
+      validation_date: VALIDATION_DATE,
     });
   }
 
