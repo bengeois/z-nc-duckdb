@@ -9,6 +9,9 @@ A project focused on analyzing the Nantes transportation system using DuckDB, wi
 Complete dataset of Nantes transportation system: 
 https://data.nantesmetropole.fr/explore/dataset/244400404_transports_commun_naolib_nantes_metropole_gtfs/table/
 
+Neighborhood dataset for Nantes municipalities:
+https://data.nantesmetropole.fr/explore/dataset/244400404_quartiers-communes-nantes-metropole/table/
+
 ## 🛠️ Installation
 
 1. Clone the repository:
@@ -22,26 +25,31 @@ https://data.nantesmetropole.fr/explore/dataset/244400404_transports_commun_naol
    sh open-data-naolib/init_db.sh
    ```
 
+3. Download the neighborhood datasets:
+   ```bash
+   sh open-data-naoned/init_file.sh
+   ```
+
 ### For JavaScript Implementation
 
-3. Navigate to the JavaScript generator:
+4. Navigate to the JavaScript generator:
    ```bash
    cd validation-generator/js
    ```
 
-4. Install dependencies:
+5. Install dependencies:
    ```bash
    npm install
    ```
 
 ### For Go Implementation
 
-3. Navigate to the Go generator:
+4. Navigate to the Go generator:
    ```bash
    cd validation-generator/go
    ```
 
-4. Ensure you have Go 1.23+ installed:
+5. Ensure you have Go 1.23+ installed:
    ```bash
    go version
    ```
