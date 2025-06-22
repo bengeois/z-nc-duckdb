@@ -18,8 +18,9 @@ https://data.nantesmetropole.fr/explore/dataset/244400404_transports_commun_naol
    ```
 
 2. Download the GTFS data:
-   - Download `gtfs_lumidata_id.zip` from the data source above
-   - Extract `stop_times.txt` and place it in the `validation-generator/` directory
+   ```bash
+   sh open-data-naolib/init_db.sh
+   ```
 
 ### For JavaScript Implementation
 

@@ -1,9 +1,9 @@
 import fs from 'fs';
 import csv from 'csv-parser';
 
-const STOP_TIMES_PATH = './stop_times.txt';
-const OUTPUT_PATH = './validations.json';
 const NUM_VALIDATIONS = 10000000;
+const STOP_TIMES_PATH = './../../data/open-data-naolib/stop_times.txt';
+const OUTPUT_PATH = './../../data/validations.json';
 const VALIDATION_DATE = '2025-06-22';
 
 function parseTime(str) {
