@@ -75,7 +75,7 @@ Generate high-performance validation data:
 
 ```bash
 cd validation-generator/go
-go run main.go
+go run main.go 100000000 2025-06-22
 ```
 
 ### Configuration
@@ -84,15 +84,13 @@ go run main.go
 Edit constants in the respective `.js` files:
 ```javascript
 const NUM_VALIDATIONS = 10000000; // Adjust as needed
+const VALIDATION_DATE = "2025-06-22"; // Adjust as needed
 ```
 
 #### Go
-Edit constants in `main.go`:
-```go
-const (
-    NUM_VALIDATIONS = 100000000  // Default: 100 million records
-    BATCH_SIZE      = 10000      // Write batch size
-)
+Use arguments passed to the Go program:
+```bash
+go run main.go <numValidations> <validationDate>
 ```
 
 ## 📋 Output Format
@@ -104,7 +102,8 @@ Both implementations generate identical JSON format:
   {
     "trip_id": "12345",
     "stop_id": "STOP_001", 
-    "validation_time": "08:30:15"
+    "validation_time": "08:30:15",
+    "validation_date": "2025-06-22"
   },
   ...
 ]
