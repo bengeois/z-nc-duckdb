@@ -123,9 +123,17 @@ from 'data/validations.parquet';
 
    </details>
 
+4. **Store `quartiers` in another database**  
+   Use DuckDB to insert data into a SQLite (or PostgreSQL, …) and load it.
+
+5. **Use DuckLake to store and query in the cloud**  
+   Choose a [Catalog Database](https://ducklake.select/docs/stable/duckdb/usage/choosing_a_catalog_database) and a [Storage](https://ducklake.select/docs/stable/duckdb/usage/choosing_storage), for a local samples take a look at [simulate-pg-and-s3](/simulate-pg-and-s3/).  
+   Add a few validations to DuckLake and see what happens.
+
 ## 🔗 Related Resources
 
 - [DuckDB Documentation](https://duckdb.org/docs/)
+- [DuckLake Documentation](https://ducklake.select/docs/)
 - [GTFS Reference](https://gtfs.org/reference/)
 - [Nantes Open Data Portal](https://data.nantesmetropole.fr/)
 - [Go Documentation](https://golang.org/doc/)
