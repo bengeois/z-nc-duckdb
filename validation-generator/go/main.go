@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	STOP_TIMES_PATH   = "./../stop_times.txt"
-	OUTPUT_PATH       = "./validations.json"
+	STOP_TIMES_PATH   = "./../../data/open-data-naolib/stop_times.txt"
+	OUTPUT_PATH       = "./../../data/validations.json"
 	BATCH_SIZE        = 10000 // Write to file every 10k records to avoid memory overflow
 )
 
