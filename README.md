@@ -77,7 +77,7 @@ Try it with DuckDB and check the number of validations contained in the newly cr
 
 </details>
 
-> Note that you can use `describe 'data/validations.parquet'` and `summarize 'data/validations.parquet'` to find out more about a dataset.
+> Note that you can use `describe from 'data/validations.parquet'` and `summarize from 'data/validations.parquet'` to find out more about a dataset.
 
 Use the previous datasets to perform the analyses below.
 
